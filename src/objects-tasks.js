@@ -155,8 +155,19 @@ function makeImmutable(obj) {
  *    makeWord({ a: [0, 1], b: [2, 3], c: [4, 5] }) => 'aabbcc'
  *    makeWord({ H:[0], e: [1], l: [2, 3, 8], o: [4, 6], W:[5], r:[7], d:[9]}) => 'HelloWorld'
  */
-function makeWord(/* lettersObject */) {
-  throw new Error('Not implemented');
+function makeWord(lettersObject) {
+  const wordArr = [];
+  const keysArr = Object.keys(lettersObject);
+
+  for (let i = 0; i < keysArr.length; i += 1) {
+    const currArr = lettersObject[keysArr[i]];
+
+    for (let j = 0; j < currArr.length; j += 1) {
+      wordArr[currArr[j]] = keysArr[i];
+    }
+  }
+
+  return wordArr.join('');
 }
 
 /**
@@ -173,8 +184,41 @@ function makeWord(/* lettersObject */) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  const cash = {
+    twentyFive: 0,
+    fifty: 0,
+    hundred: 0,
+  };
+
+  for (let i = 0; i < queue.length; i += 1) {
+    if (queue[i] === 25) {
+      cash.twentyFive += 1;
+    } else if (queue[i] === 50) {
+      if (cash.twentyFive === 0) {
+        return false;
+      }
+
+      cash.twentyFive -= 1;
+      cash.fifty += 1;
+    } else if (queue[i] === 100) {
+      if (cash.twentyFive === 0) {
+        return false;
+      }
+
+      if (cash.fifty === 0) {
+        if (cash.twentyFive < 3) {
+          return false;
+        }
+        cash.twentyFive -= 3;
+      }
+      cash.fifty -= 1;
+      cash.twentyFive -= 1;
+      cash.hundred += 1;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -190,8 +234,12 @@ function sellTickets(/* queue */) {
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(/* width, height */) {
-  throw new Error('Not implemented');
+function Rectangle(width, height) {
+  this.width = width;
+  this.height = height;
+  this.getArea = () => {
+    return this.width * this.height;
+  };
 }
 
 /**
@@ -204,8 +252,8 @@ function Rectangle(/* width, height */) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { height: 10, width: 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 /**
@@ -219,8 +267,8 @@ function getJSON(/* obj */) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  return Object.setPrototypeOf(JSON.parse(json), proto);
 }
 
 /**
@@ -249,8 +297,15 @@ function fromJSON(/* proto, json */) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    if (a.country < b.country) return -1;
+    if (a.country > b.country) return 1;
+    if (a.city < b.city) return -1;
+    if (a.city > b.city) return 1;
+
+    return 0;
+  });
 }
 
 /**
